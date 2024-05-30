@@ -158,16 +158,16 @@ chmod +x ./deploy.sh
 ```
 
 ### 2. Run Docker Compose
-#### docker compose file: `docker-compose.yaml` 
-#### deploy transaction service: `deploy/monolithic/Dockerfile.transaction.service`
-#### launch new terminal in root folder project, and run:
+- docker compose file: `docker-compose.yaml` 
+- deploy transaction service: `deploy/monolithic/Dockerfile.transaction.service`
+- launch new terminal in root folder project, and run:
 ```bash
 ./deploy.sh run_dev
 ```
 ### 3. Test CreateTransaction and GetTransaction
-#### TestCreateTransaction (6 case passed)
-#### TestGetTransactions (4 case passed)
-#### launch new terminal in root folder, and run:
+- TestCreateTransaction (6 case passed)
+- TestGetTransactions (4 case passed)
+- launch new terminal in root folder, and run:
 ```bash
 cd test
 ```
