@@ -305,3 +305,26 @@ This endpoint retrieves transactions based on the provided parameters:
    }
 }
 ```
+
+5. TODO:
+- Add TOTP in future for secure api create transaction into api endpoints
+- I implemented one totp file [totp.go](./pkgs/totp/otpserver.go)
+- Can run test
+
+```bash
+cd pkgs/totp
+```
+then run
+
+```
+go test -v -run TestOTP
+```
+
+- Notes:
+- otp library be implemented and used in some projects before
+- it create one otp for each user_id in one window time 60s or any if be configured
+- for example at 9:30 (456789 created for user_id = 10 with one time zero t0)
+- then only this code on user_id = 10
+- can authenticate and pass from 9:30:40s to 9:31:40
+
+### THANKS FOR READING AND REVIEWING
