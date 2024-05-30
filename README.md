@@ -13,7 +13,8 @@
 │   │   │   ├── invalid_err_transaction_type.go
 │   │   │   ├── ...
 │   │   ├── httpresponse // folder used for responses, I implemented transform http code on each error or success (include data message)
-// transform with explicit error or success data 
+// transform with explicit error or success data
+// [response.go](./internal/common/httpresponse/response.go)
 func (r *Response) TransformToCreatedSuccess(dataMessage any) *Response {
 	r.resetBeforeTransform()
 	r.Code = http.StatusCreated
@@ -158,8 +159,21 @@ chmod +x ./deploy.sh
 ```
 
 ### 2. Run Docker Compose
-- docker compose file: `docker-compose.yaml` 
-- deploy transaction service: `deploy/monolithic/Dockerfile.transaction.service`
+- create or edit feel to free use [env.dev](deploy/monolithic/.env.dev)
+```.env
+#mysql env
+MYSQL_HOST=mysql-service
+MYSQL_PORT=3306
+MYSQL_ROOT_PASSWORD=171193
+MYSQL_USER=thaianhsoft
+MYSQL_PASSWORD=thaianh1711
+MYSQL_DATABASE=transaction_db
+
+#redis env
+REDIS_ADDR=redis-service:6379
+```
+- `docker compose file`: [docker-compose.yaml](./docker_compose.yaml) 
+- `docker file for transaction service`: [Dockerfile.transaction.service](./deploy/monolithic/Dockerfile.transaction.service)
 - launch new terminal in root folder project, and run:
 ```bash
 ./deploy.sh run_dev
@@ -197,11 +211,10 @@ go test -v -run TestGetTransactions
 **Response Data:**
 ```json
 {
-   "code": 201 | 400 | 404 ...
-   "err_code_string: // anything for detail error
+   "code": "201 | 400 | 404"
+   "err_code_string: "anything for detail error",
    "data": {
-   // empty if have any error
-   // return transaction details if success
+       "detail transaction as get transaction api"
    }
 }
 ```
@@ -232,20 +245,17 @@ This endpoint retrieves transactions based on the provided parameters:
 
 ```json
 {
-"code": 200 ok | 400 bad request | 404 not found account or not user_id owner ...
-   "err_code_string: // anything for detail error
+"code": "200 ok | 400 bad request | 404 not found account or not user_id owner" 
+   "err_code_string: "anything for detail error"
    "data": {
-   // empty if have any error
-   // return transaction details if success
-   // example success data
        [
          {
            "id": 1,
            "user_id": 123,
            "account_id": 456,
            "amount": 100.50,
-           "transaction_type": "deposit"|"withdraw",
-           "bank": "ACB"|"VIB"|"VCB"
+           "transaction_type": "deposit",
+           "bank": "VCB"
            "created_at": "2023-05-30 12:34:56 +0700 UTC"
          },
          {
@@ -280,11 +290,41 @@ This endpoint retrieves transactions based on the provided parameters:
 
 ```json
 {
-   "code": accepted 202 | bad request 400 | 404 not found account or not user_id owner or not found transaction_id...
-   "err_code_string: // anything for detail error
+   "code":  "bad request 400 | 404 not found account or not user_id owner or not found transaction_id"
+   "err_code_string: "anything for error detail",
    "data": {
-   // empty if have any error
-   // return transaction details if success
+       {
+           "id": 2,
+           "user_id": 123,
+           "account_id": 789,
+           "amount": 50.25,
+           "transaction_type": "deposit"|"withdraw",
+           "bank": "ACB"|"VIB"|"VCB",
+           "created_at": "2023-06-01 09:15:30 +0700 UTC"
+       }
    }
 }
 ```
+
+5. TODO:
+- Add TOTP in future for secure api create transaction into api endpoints
+- I implemented one totp file [totp.go](./pkgs/totp/otpserver.go)
+- Can run test
+
+```bash
+cd pkgs/totp
+```
+then run
+
+```
+go test -v -run TestOTP
+```
+
+- Notes:
+- otp library be implemented and used in some projects before
+- it create one otp for each user_id in one window time 60s or any if be configured
+- for example at 9:30 (456789 created for user_id = 10 with one time zero t0)
+- then only this code on user_id = 10
+- can authenticate and pass from 9:30:40s to 9:31:40
+
+### THANKS FOR READING AND REVIEWING
