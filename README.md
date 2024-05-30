@@ -203,7 +203,7 @@ go test -v -run TestGetTransactions
 ```json
 {
   "account_id": 456,
-  "amount": 100.50,
+  "amount": 10500,
   "transaction_type": "deposit"
 }
 ```
