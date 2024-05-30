@@ -253,7 +253,7 @@ This endpoint retrieves transactions based on the provided parameters:
            "id": 1,
            "user_id": 123,
            "account_id": 456,
-           "amount": 100.50,
+           "amount": 10500,
            "transaction_type": "deposit",
            "bank": "VCB"
            "created_at": "2023-05-30 12:34:56 +0700 UTC"
@@ -262,7 +262,7 @@ This endpoint retrieves transactions based on the provided parameters:
            "id": 2,
            "user_id": 123,
            "account_id": 789,
-           "amount": 50.25,
+           "amount": 50250,
            "transaction_type": "deposit"|"withdraw",
            "bank": "ACB"|"VIB"|"VCB",
            "created_at": "2023-06-01 09:15:30 +0700 UTC"
