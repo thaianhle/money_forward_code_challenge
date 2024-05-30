@@ -1,0 +1,14 @@
+# Currently Not run in docker-compose
+# Prepare only to set disable persistent write to disk on redis host
+# TODO
+# Use the official Redis image from Docker Hub
+FROM redis:latest
+
+# Copy custom redis.conf to the container
+COPY redis.conf /usr/local/etc/redis/redis.conf
+
+# Expose Redis port
+EXPOSE 6379
+
+# Run Redis server with the custom config
+CMD [ "redis-server", "/usr/local/etc/redis/redis.conf" ]

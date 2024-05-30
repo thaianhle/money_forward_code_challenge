@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  redis-service: # Renamed Redis service
+    image: redis
+    #container_name: redis_host
+    ports:
+      - "6379:6379"
+    networks:
+      - transaction-user-network
+
+  mysql-service: # Renamed MySQL service
+    image: mysql:latest
+    #container_name: mysql_host
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: "UTC"
+    env_file:
+      - deploy/monolithic/.env.dev
+
+    command: --default-time-zone='+00:00'
+    volumes:
+      - ./migration/mysql-data:/docker-entrypoint-initdb.d
+    networks:
+      - transaction-user-network
+
+  transaction-service:
+    restart: always
+    build:
+      context: .
+      dockerfile: deploy/monolithic/Dockerfile.transaction.service
+    env_file:
+      - deploy/monolithic/.env.dev
+    depends_on:
+      - mysql-service
+      - redis-service
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+    networks:
+      - transaction-user-network
+
+networks:
+  transaction-user-network:
+    driver : bridge

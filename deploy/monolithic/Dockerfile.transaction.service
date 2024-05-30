@@ -1,0 +1,21 @@
+# Use an official Golang runtime as a parent image
+FROM golang:1.22.3-alpine3.19
+
+# Set the Current Working Directory inside the container
+WORKDIR /app
+
+# Copy the go.mod and go.sum files to the container
+COPY ../../ .
+
+# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
+RUN go mod download
+
+# Build the Go app directly from its source file
+RUN go build -o /app/transaction-service ./cmd/configuration/app.go
+
+# dev
+CMD ["go", "run", "./cmd/configuration/app.go"]
+# Command to run the executable
+#CMD ["/app/transaction-service"]
+
+
