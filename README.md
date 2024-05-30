@@ -197,8 +197,8 @@ go test -v -run TestGetTransactions
 **Response Data:**
 ```json
 {
-   "code": 201 | 400 | 404 ...
-   "err_code_string: // anything for detail error
+   "code": "201 | 400 | 404"
+   "err_code_string: "anything for detail error"
    "data": {
    // empty if have any error
    // return transaction details if success
@@ -232,12 +232,9 @@ This endpoint retrieves transactions based on the provided parameters:
 
 ```json
 {
-"code": 200 ok | 400 bad request | 404 not found account or not user_id owner ...
-   "err_code_string: // anything for detail error
+"code": "200 ok | 400 bad request | 404 not found account or not user_id owner" 
+   "err_code_string: "anything for detail error"
    "data": {
-   // empty if have any error
-   // return transaction details if success
-   // example success data
        [
          {
            "id": 1,
@@ -280,11 +277,18 @@ This endpoint retrieves transactions based on the provided parameters:
 
 ```json
 {
-   "code": accepted 202 | bad request 400 | 404 not found account or not user_id owner or not found transaction_id...
-   "err_code_string: // anything for detail error
+   "code":  "bad request 400 | 404 not found account or not user_id owner or not found transaction_id"
+   "err_code_string: "anything for detail error"
    "data": {
-   // empty if have any error
-   // return transaction details if success
+       {
+           "id": 2,
+           "user_id": 123,
+           "account_id": 789,
+           "amount": 50.25,
+           "transaction_type": "deposit"|"withdraw",
+           "bank": "ACB"|"VIB"|"VCB",
+           "created_at": "2023-06-01 09:15:30 +0700 UTC"
+       }
    }
 }
 ```
