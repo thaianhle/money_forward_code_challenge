@@ -179,8 +179,8 @@ REDIS_ADDR=redis-service:6379
 ./deploy.sh run_dev
 ```
 ### 3. Test CreateTransaction and GetTransaction
-- TestCreateTransaction (6 case passed)
-- TestGetTransactions (4 case passed)
+- TestCreateTransaction (6 case passed) [complete_test.go](./test/complete_test.go)
+- TestGetTransactions (4 case passed) [complete_test.go](./test/complete_test.go)
 - launch new terminal in root folder, and run:
 ```bash
 cd test
