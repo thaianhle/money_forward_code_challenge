@@ -13,7 +13,8 @@
 │   │   │   ├── invalid_err_transaction_type.go
 │   │   │   ├── ...
 │   │   ├── httpresponse // folder used for responses, I implemented transform http code on each error or success (include data message)
-// transform with explicit error or success data 
+// transform with explicit error or success data
+// [response.go](./internal/common/httpresponse/response.go)
 func (r *Response) TransformToCreatedSuccess(dataMessage any) *Response {
 	r.resetBeforeTransform()
 	r.Code = http.StatusCreated
@@ -158,8 +159,21 @@ chmod +x ./deploy.sh
 ```
 
 ### 2. Run Docker Compose
-- docker compose file: `docker-compose.yaml` 
-- deploy transaction service: `deploy/monolithic/Dockerfile.transaction.service`
+- create or edit feel to free use [env.dev](deploy/monolithic/.env.dev)
+```.env
+#mysql env
+MYSQL_HOST=mysql-service
+MYSQL_PORT=3306
+MYSQL_ROOT_PASSWORD=171193
+MYSQL_USER=thaianhsoft
+MYSQL_PASSWORD=thaianh1711
+MYSQL_DATABASE=transaction_db
+
+#redis env
+REDIS_ADDR=redis-service:6379
+```
+- `docker compose file`: [docker-compose.yaml](./docker_compose.yaml) 
+- `docker file for transaction service`: [Dockerfile.transaction.service](./deploy/monolithic/Dockerfile.transaction.service)
 - launch new terminal in root folder project, and run:
 ```bash
 ./deploy.sh run_dev
@@ -198,10 +212,9 @@ go test -v -run TestGetTransactions
 ```json
 {
    "code": "201 | 400 | 404"
-   "err_code_string: "anything for detail error"
+   "err_code_string: "anything for detail error",
    "data": {
-   // empty if have any error
-   // return transaction details if success
+       "detail transaction as get transaction api"
    }
 }
 ```
@@ -241,8 +254,8 @@ This endpoint retrieves transactions based on the provided parameters:
            "user_id": 123,
            "account_id": 456,
            "amount": 100.50,
-           "transaction_type": "deposit"|"withdraw",
-           "bank": "ACB"|"VIB"|"VCB"
+           "transaction_type": "deposit",
+           "bank": "VCB"
            "created_at": "2023-05-30 12:34:56 +0700 UTC"
          },
          {
@@ -278,7 +291,7 @@ This endpoint retrieves transactions based on the provided parameters:
 ```json
 {
    "code":  "bad request 400 | 404 not found account or not user_id owner or not found transaction_id"
-   "err_code_string: "anything for detail error"
+   "err_code_string: "anything for error detail",
    "data": {
        {
            "id": 2,
